@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="120 seconds" debug="false">
+	<property name="FILE_LOG_PATTERN" value="%d{yyyyMMddHHmmss} %msg%n" />
+	<property name="FILE_LOG_PATTERN_TIME" value="%d{yyyyMMddHHmmssSSS} %msg%n" />
+	<property name="FILE_LOG_PATTERN_ONLY_CONTENT" value="%msg%n" />
+	<property name="SERVER_LOG_PATTERN" value="%d %p (%c:%L\)- %m%n" />
+	<property name="LOG_PATH" value="/Users/feng/logs/fengdis" />
+	<contextName>fengdis</contextName>
+
+	<!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,,,, -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!--<pattern>%d %p (%c:%L\)- %m%n</pattern>-->
+			<pattern>%black(%contextName) %red(%d{yyyy-MM-dd HH:mm:ss:SSS}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{36}:%L) - %gray(%msg%n)</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<appender name="server"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${LOG_PATH}/server.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 按天回滚 daily -->
+			<fileNamePattern>${LOG_PATH}/server.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<!-- 日志最大的历史 60天 -->
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d %p (%c:%L\)- %m%n</Pattern>
+			<charset>UTF-8</charset> <!-- 此处设置字符集 -->
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<!-- 过滤的级别 -->
+			<level>INFO</level>
+			<!-- 匹配时的操作：接收（记录） -->
+			<onMatch>ACCEPT</onMatch>
+			<!-- 不匹配时的操作：拒绝（不记录） -->
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<appender name="asyn_server" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>10000</queueSize>
+		<appender-ref ref="server" />
+	</appender>
+
+	<appender name="service"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<File>${LOG_PATH}/service.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 按天回滚 daily -->
+			<fileNamePattern>${LOG_PATH}/service.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<!-- 日志最大的历史 60天 -->
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>${FILE_LOG_PATTERN_TIME}</Pattern>
+			<charset>UTF-8</charset> <!-- 此处设置字符集 -->
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<!-- 过滤的级别 -->
+			<level>INFO</level>
+			<!-- 匹配时的操作：接收（记录） -->
+			<onMatch>ACCEPT</onMatch>
+			<!-- 不匹配时的操作：拒绝（不记录） -->
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<appender name="login"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<File>${LOG_PATH}/login.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/login.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<!-- 日志最大的历史 60天 -->
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>${FILE_LOG_PATTERN_TIME}</Pattern>
+			<charset>UTF-8</charset> <!-- 此处设置字符集 -->
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<!-- 过滤的级别 -->
+			<level>INFO</level>
+			<!-- 匹配时的操作：接收（记录） -->
+			<onMatch>ACCEPT</onMatch>
+			<!-- 不匹配时的操作：拒绝（不记录） -->
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<logger name="service" level="INFO" additivity="false">
+		<appender-ref ref="service" />
+	</logger>
+
+	<logger name="login" level="INFO" additivity="false">
+		<appender-ref ref="login" />
+	</logger>
+
+	<!-- 系统模块日志级别控制  -->
+	<logger name="com.fengdis" level="info" />
+	<!-- Spring日志级别控制  -->
+	<logger name="org.springframework" level="warn" />
+
+	<root level="INFO">
+		<appender-ref ref="asyn_server" />
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengdis.mapper.SimpleUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fengdis.entity.SimpleUser">
+        <id column="id" property="id"/>
+        <association column="userid" property="user" javaType="com.fengdis.entity.User" select="com.fengdis.mapper.UserMapper.selectByUserId"></association>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        userid AS userid, username, password, birthdate, gender, nickname, picture, phone, qq,wechat,email,github,createtime,updatetime,job,status,level,remark
+    </sql>
+
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        SELECT * FROM tb_simple_user WHERE id = #{id}
+    </select>
+
+    <!-- 一对一关联 方式一 begin -->
+    <select id="findById1" parameterType="int" resultType="com.fengdis.entity.SimpleUser">
+        SELECT
+        a.*
+        FROM tb_simple_user a
+        LEFT JOIN tb_user b ON a.userid = b.userid where a.id = #{id}
+    </select>
+    <!-- 一对一关联 方式一 end -->
+
+    <!-- 一对一关联 方式二 begin -->
+    <resultMap id="resultMap2" type="com.example.model.Student">
+        <id column="id" property="id"/>
+        <association column="userid" property="user" javaType="com.fengdis.entity.User" resultMap="com.fengdis.mapper.UserMapper.BaseResultMap"></association>
+    </resultMap>
+    <select id="findById2" parameterType="int" resultMap="resultMap2">
+        SELECT
+        a.*
+        FROM tb_simple_user a
+        LEFT JOIN tb_user b ON a.userid = b.userid where a.id = #{id}
+    </select>
+    <!-- 一对一关联 方式二 end -->
+
+</mapper>

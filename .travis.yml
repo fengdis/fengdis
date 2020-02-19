@@ -1,0 +1,9 @@
+language: java
+jdk:
+  - openjdk8
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true
+script: mvn test
+
+#持续集成完成后触发钉钉机器人通知
+notifications:
+  webhooks: https://oapi.dingtalk.com/robot/send?access_token=a79b9667d6aaeef09519193813020206ecc13529a940b9961d1d9ecbbde1e23f

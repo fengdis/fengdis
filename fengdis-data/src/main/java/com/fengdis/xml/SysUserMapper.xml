@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengdis.mapper.SysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fengdis.entity.SysUser">
+        <id column="id" property="id" />
+        <association column="userid" property="user" javaType="User" select="com.fengdis.entity.User"></association>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        userid AS userid, username, password, birthdate, gender, nickname, picture, phone, qq,wechat,email,github,createtime,updatetime,job,status,level,remark
+    </sql>
+
+</mapper>
