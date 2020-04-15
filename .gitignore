@@ -17,3 +17,4 @@ target/
 *.properties
 application-dev.properties
 TestCase.java
+*Test.java
