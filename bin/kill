@@ -1,0 +1,31 @@
+#!/bin/sh
+if [ ! -n "$1" ]; then
+   echo "ERROR: Please input which server port you want to kill!"
+   echo "Example: sh kill 9650"
+   exit 1
+fi
+
+cd `dirname $0`
+CURRENT_PATH=`pwd`
+kill `cat $CURRENT_PATH/pid$1`
+#执行结果状态，0为成功，1为失败
+if [ $? -ne 0 ];then
+	EXEC_STATUS="failed"
+else
+	EXEC_STATUS="success"
+fi
+
+rm -f pid
+
+###############记录停止操作日志###################
+#当前时间
+Time=`date "+%Y-%m-%d %H:%M:%S"`
+LOG_FILE=$CURRENT_PATH/logs/boot.log
+if [ ! -d "$CURRENT_PATH/logs" ]; then
+	mkdir $CURRENT_PATH/logs  
+fi 
+if [ ! -f "$LOG_FILE" ]; then
+	touch $LOG_FILE  
+fi 
+echo "$Time kill $1 $EXEC_STATUS" >> $LOG_FILE
+###############记录停止操作日志###################

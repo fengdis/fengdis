@@ -29,7 +29,6 @@
         <dependency>
             <groupId>com.fengdis</groupId>
             <artifactId>fengdis-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>

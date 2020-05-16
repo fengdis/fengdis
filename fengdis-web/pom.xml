@@ -26,20 +26,17 @@
         <dependency>
             <groupId>com.fengdis</groupId>
             <artifactId>fengdis-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.fengdis</groupId>
             <artifactId>fengdis-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
 
         <dependency>
             <groupId>com.fengdis</groupId>
             <artifactId>fengdis-data</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -125,6 +122,23 @@
                 <configuration>
                     <mainClass>com.fengdis.FengdisApplication</mainClass>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-denpendencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

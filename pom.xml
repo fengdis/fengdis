@@ -34,6 +34,25 @@
     <dependencyManagement>
         <dependencies>
 
+            <dependency>
+                <groupId>com.fengdis</groupId>
+                <artifactId>fengdis-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fengdis</groupId>
+                <artifactId>fengdis-core</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.fengdis</groupId>
+                <artifactId>fengdis-data</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
             <!--去掉springboot本身日志依赖-->
             <!--<dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -721,12 +740,19 @@
                     <include>**/mapper/*.xml</include>
                 </includes>
             </resource>-->
+
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
         </resources>
 
         <finalName>fengdis</finalName>
-        <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+        <pluginManagement>
             <plugins>
-
                 <!-- maven install跳过test -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -737,6 +763,36 @@
                         <!-- skip 对应命令行参数为 maven.test.skip -->
                         <skip>false</skip>
                     </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <classpathPrefix>lib/</classpathPrefix>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>copy-denpendencies</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>copy-dependencies</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <plugin>
@@ -771,9 +827,8 @@
                 </plugin>
 
             </plugins>
+
         </pluginManagement>
     </build>
-
-
 
 </project>
